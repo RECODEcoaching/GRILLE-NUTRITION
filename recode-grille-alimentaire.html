@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grille de lecture — RECODE Coaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --violet: #7C3AED;
+    --lavande: #EDE9FE;
+    --lavande-mid: #C4B5FD;
+    --blanc: #FAFAFA;
+    --gris-bg: #F5F5F7;
+    --noir: #1D1D1F;
+    --gris: #6E6E73;
+    --violet-dark: #5C3ABE;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: var(--blanc);
+    color: var(--noir);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--noir);
+    padding: 56px 24px 48px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 640px; margin: 0 auto; position: relative; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(124,58,237,0.2);
+    border: 1px solid rgba(196,181,253,0.3);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--lavande-mid);
+    margin-bottom: 20px;
+  }
+  .hero-badge span { width: 5px; height: 5px; border-radius: 50%; background: var(--violet); }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 48px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+  .hero h1 em { color: var(--lavande-mid); font-style: normal; }
+  .hero p {
+    font-size: 15px; color: #aaa; line-height: 1.7; max-width: 480px;
+    margin-bottom: 20px;
+  }
+  .hero-handle {
+    font-size: 12px; font-weight: 700;
+    color: var(--violet); letter-spacing: 0.04em;
+  }
+
+  /* ── WRAPPER ── */
+  .wrapper { max-width: 640px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ── INTRO CARD ── */
+  .intro-card {
+    background: var(--lavande);
+    border-radius: 14px;
+    padding: 24px;
+    margin: 32px 0 40px;
+    border-left: 3px solid var(--violet);
+  }
+  .intro-card p {
+    font-size: 14px; color: var(--violet-dark); line-height: 1.7;
+  }
+  .intro-card strong { font-weight: 700; }
+
+  /* ── SECTION PILIER ── */
+  .pilier { margin-bottom: 48px; }
+  .pilier-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 24px;
+  }
+  .pilier-num {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--violet); color: #fff;
+    font-size: 14px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .pilier-title-block {}
+  .pilier-label {
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--violet); margin-bottom: 2px;
+  }
+  .pilier-title {
+    font-size: 20px; font-weight: 800;
+    letter-spacing: -0.02em; color: var(--noir);
+  }
+  .pilier-divider {
+    width: 100%; height: 1px;
+    background: rgba(0,0,0,0.07);
+    margin-bottom: 20px;
+  }
+
+  /* ── QUESTION ── */
+  .question {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .question:focus-within {
+    border-color: rgba(124,58,237,0.3);
+    box-shadow: 0 0 0 3px rgba(124,58,237,0.07);
+  }
+  .question-text {
+    font-size: 14px; font-weight: 600; color: var(--noir);
+    line-height: 1.5; margin-bottom: 14px;
+  }
+  .scale {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .scale-labels {
+    display: flex; justify-content: space-between;
+    margin-top: 8px;
+  }
+  .scale-label {
+    font-size: 10px; color: var(--gris); font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+  .scale input[type="radio"] { display: none; }
+  .scale label {
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1.5px solid rgba(0,0,0,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--gris);
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .scale label:hover {
+    border-color: var(--violet);
+    color: var(--violet);
+    background: var(--lavande);
+  }
+  .scale input[type="radio"]:checked + label {
+    background: var(--violet);
+    border-color: var(--violet);
+    color: #fff;
+    transform: scale(1.05);
+  }
+
+  /* ── PROGRESS ── */
+  .progress-bar-wrap {
+    background: var(--gris-bg);
+    border-radius: 99px; height: 6px;
+    margin: 32px 0 8px; overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%; background: var(--violet);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .progress-text {
+    font-size: 11px; color: var(--gris); font-weight: 600;
+    text-align: right; margin-bottom: 32px;
+  }
+
+  /* ── CTA BOUTON ── */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--violet); color: #fff;
+    border: none; border-radius: 10px;
+    padding: 14px 28px;
+    font-size: 15px; font-weight: 700;
+    font-family: 'Open Sans', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none;
+    width: 100%; justify-content: center;
+    margin-top: 8px;
+  }
+  .btn-primary:hover { background: #6d28d9; transform: translateY(-1px); }
+  .btn-primary:disabled {
+    background: #ccc; cursor: not-allowed; transform: none;
+  }
+  .btn-note {
+    font-size: 11px; color: var(--gris); text-align: center;
+    margin-top: 8px;
+  }
+
+  /* ── RÉSULTATS ── */
+  #results { display: none; }
+  #results.visible { display: block; }
+
+  .results-hero {
+    background: var(--noir);
+    border-radius: 16px;
+    padding: 32px 24px;
+    margin: 40px 0 32px;
+    position: relative; overflow: hidden;
+  }
+  .results-hero::before {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .results-hero .accent { width: 28px; height: 3px; border-radius: 2px; background: var(--violet); margin-bottom: 16px; }
+  .results-hero .label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--lavande-mid); margin-bottom: 8px;
+  }
+  .results-hero h2 {
+    font-size: 26px; font-weight: 800; letter-spacing: -0.02em;
+    color: #fff; line-height: 1.2; margin-bottom: 8px;
+  }
+  .results-hero p { font-size: 14px; color: #999; line-height: 1.7; }
+
+  /* Score cards */
+  .score-cards { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+  .score-card {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 14px;
+    padding: 20px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .score-circle {
+    width: 56px; height: 56px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px; font-weight: 800;
+  }
+  .score-circle.solid  { background: var(--violet); color: #fff; }
+  .score-circle.fragile { background: #FEF3C7; color: #92400E; }
+  .score-circle.low    { background: #FEE2E2; color: #B91C1C; }
+
+  .score-info { flex: 1; }
+  .score-pilier {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--violet); margin-bottom: 4px;
+  }
+  .score-title { font-size: 16px; font-weight: 800; color: var(--noir); margin-bottom: 4px; }
+  .score-status {
+    display: inline-block;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.07em; border-radius: 4px; padding: 2px 8px;
+  }
+  .score-status.solid   { background: var(--lavande); color: var(--violet); }
+  .score-status.fragile { background: #FEF3C7; color: #92400E; }
+  .score-status.low     { background: #FEE2E2; color: #B91C1C; }
+
+  .score-bar-wrap { width: 100%; height: 5px; background: var(--gris-bg); border-radius: 99px; margin-top: 8px; }
+  .score-bar { height: 100%; border-radius: 99px; transition: width 0.8s ease 0.2s; }
+  .score-bar.solid   { background: var(--violet); }
+  .score-bar.fragile { background: #F59E0B; }
+  .score-bar.low     { background: #EF4444; }
+
+  .score-interp {
+    font-size: 13px; color: var(--gris); line-height: 1.6;
+    margin-top: 10px;
+  }
+
+  /* Interprétation bloc */
+  .interp-block {
+    background: var(--lavande);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .interp-block h3 {
+    font-size: 16px; font-weight: 800; color: var(--noir);
+    margin-bottom: 12px; letter-spacing: -0.01em;
+  }
+  .interp-block p {
+    font-size: 13px; color: var(--violet-dark); line-height: 1.7;
+  }
+
+  /* CTA section */
+  .cta-section {
+    background: var(--noir); border-radius: 16px;
+    padding: 32px 24px; text-align: center;
+  }
+  .cta-section .accent { width: 28px; height: 3px; border-radius: 2px; background: var(--violet); margin: 0 auto 16px; }
+  .cta-section h3 {
+    font-size: 22px; font-weight: 800; color: #fff;
+    letter-spacing: -0.02em; margin-bottom: 12px;
+  }
+  .cta-section p { font-size: 14px; color: #999; line-height: 1.7; margin-bottom: 24px; }
+  .cta-buttons { display: flex; flex-direction: column; gap: 12px; }
+  .btn-wa {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    background: #25D366; color: #fff;
+    border: none; border-radius: 10px;
+    padding: 14px 28px;
+    font-size: 15px; font-weight: 700;
+    font-family: 'Open Sans', sans-serif;
+    cursor: pointer; text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-wa:hover { background: #1ebe5d; transform: translateY(-1px); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    background: transparent;
+    color: var(--lavande-mid);
+    border: 1px solid rgba(196,181,253,0.3);
+    border-radius: 10px; padding: 14px 28px;
+    font-size: 15px; font-weight: 700;
+    font-family: 'Open Sans', sans-serif;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: rgba(124,58,237,0.1); }
+
+  /* footer */
+  .footer {
+    text-align: center; padding: 32px 24px;
+    font-size: 11px; color: var(--gris);
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .pilier { animation: fadeUp 0.4s ease both; }
+  .pilier:nth-child(1) { animation-delay: 0.05s; }
+  .pilier:nth-child(2) { animation-delay: 0.15s; }
+  .pilier:nth-child(3) { animation-delay: 0.25s; }
+
+  .score-card { animation: fadeUp 0.4s ease both; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge"><span></span> RECODE Coaching</div>
+    <h1>Ta relation à l'alimentation<br><em>en 3 minutes.</em></h1>
+    <p>Ce test évalue les 3 piliers de ton comportement alimentaire : Corps, Plaisir, et Contrôle. Pas de jugement — juste de la clarté.</p>
+    <div class="hero-handle">@indianaafit</div>
+  </div>
+</div>
+
+<div class="wrapper">
+
+  <div class="intro-card">
+    <p>Évalue chaque affirmation de <strong>1 à 5</strong>.<br>
+    <strong>1</strong> = pas du tout vrai &nbsp;·&nbsp; <strong>5</strong> = toujours vrai<br><br>
+    Il n'y a pas de bonne ou mauvaise réponse. Réponds instinctivement.</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="progress-text" id="progressText">0 / 15 réponses</div>
+
+  <!-- FORMULAIRE -->
+  <form id="quizForm">
+
+    <!-- PILIER 1 -->
+    <div class="pilier">
+      <div class="pilier-header">
+        <div class="pilier-num">1</div>
+        <div class="pilier-title-block">
+          <div class="pilier-label">Pilier 1</div>
+          <div class="pilier-title">Le Corps — Physiologique</div>
+        </div>
+      </div>
+      <div class="pilier-divider"></div>
+
+      <div class="question" id="q1-wrap">
+        <div class="question-text">Je reconnais facilement mes signaux de faim.</div>
+        <div class="scale" id="scale-q1">
+          <input type="radio" name="q1" id="q1v1" value="1"><label for="q1v1">1</label>
+          <input type="radio" name="q1" id="q1v2" value="2"><label for="q1v2">2</label>
+          <input type="radio" name="q1" id="q1v3" value="3"><label for="q1v3">3</label>
+          <input type="radio" name="q1" id="q1v4" value="4"><label for="q1v4">4</label>
+          <input type="radio" name="q1" id="q1v5" value="5"><label for="q1v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+
+      <div class="question" id="q2-wrap">
+        <div class="question-text">Je sais quand je suis rassasiée, même sans cadre externe.</div>
+        <div class="scale">
+          <input type="radio" name="q2" id="q2v1" value="1"><label for="q2v1">1</label>
+          <input type="radio" name="q2" id="q2v2" value="2"><label for="q2v2">2</label>
+          <input type="radio" name="q2" id="q2v3" value="3"><label for="q2v3">3</label>
+          <input type="radio" name="q2" id="q2v4" value="4"><label for="q2v4">4</label>
+          <input type="radio" name="q2" id="q2v5" value="5"><label for="q2v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+
+      <div class="question">
+        <div class="question-text">Je distingue la faim de la fatigue ou du stress.</div>
+        <div class="scale">
+          <input type="radio" name="q3" id="q3v1" value="1"><label for="q3v1">1</label>
+          <input type="radio" name="q3" id="q3v2" value="2"><label for="q3v2">2</label>
+          <input type="radio" name="q3" id="q3v3" value="3"><label for="q3v3">3</label>
+          <input type="radio" name="q3" id="q3v4" value="4"><label for="q3v4">4</label>
+          <input type="radio" name="q3" id="q3v5" value="5"><label for="q3v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+
+      <div class="question">
+        <div class="question-text">Mon niveau d'énergie influence mes choix alimentaires et j'en ai conscience.</div>
+        <div class="scale">
+          <input type="radio" name="q4" id="q4v1" value="1"><label for="q4v1">1</label>
+          <input type="radio" name="q4" id="q4v2" value="2"><label for="q4v2">2</label>
+          <input type="radio" name="q4" id="q4v3" value="3"><label for="q4v3">3</label>
+          <input type="radio" name="q4" id="q4v4" value="4"><label for="q4v4">4</label>
+          <input type="radio" name="q4" id="q4v5" value="5"><label for="q4v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+
+      <div class="question">
+        <div class="question-text">J'observe si et comment mon cycle ou mes hormones influencent mes envies alimentaires.</div>
+        <div class="scale">
+          <input type="radio" name="q5" id="q5v1" value="1"><label for="q5v1">1</label>
+          <input type="radio" name="q5" id="q5v2" value="2"><label for="q5v2">2</label>
+          <input type="radio" name="q5" id="q5v3" value="3"><label for="q5v3">3</label>
+          <input type="radio" name="q5" id="q5v4" value="4"><label for="q5v4">4</label>
+          <input type="radio" name="q5" id="q5v5" value="5"><label for="q5v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+    </div>
+
+    <!-- PILIER 2 -->
+    <div class="pilier">
+      <div class="pilier-header">
+        <div class="pilier-num">2</div>
+        <div class="pilier-title-block">
+          <div class="pilier-label">Pilier 2</div>
+          <div class="pilier-title">Le Plaisir — Hédonique / Émotionnel</div>
+        </div>
+      </div>
+      <div class="pilier-divider"></div>
+
+      <div class="question">
+        <div class="question-text">Je prends du plaisir à manger sans culpabilité.</div>
+        <div class="scale">
+          <input type="radio" name="q6" id="q6v1" value="1"><label for="q6v1">1</label>
+          <input type="radio" name="q6" id="q6v2" value="2"><label for="q6v2">2</label>
+          <input type="radio" name="q6" id="q6v3" value="3"><label for="q6v3">3</label>
+          <input type="radio" name="q6" id="q6v4" value="4"><label for="q6v4">4</label>
+          <input type="radio" name="q6" id="q6v5" value="5"><label for="q6v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+
+      <div class="question">
+        <div class="question-text">Je comprends souvent ce qui déclenche mes envies (stress, contexte, émotions).</div>
+        <div class="scale">
+          <input type="radio" name="q7" id="q7v1" value="1"><label for="q7v1">1</label>
+          <input type="radio" name="q7" id="q7v2" value="2"><label for="q7v2">2</label>
+          <input type="radio" name="q7" id="q7v3" value="3"><label for="q7v3">3</label>
+          <input type="radio" name="q7" id="q7v4" value="4"><label for="q7v4">4</label>
+          <input type="radio" name="q7" id="q7v5" value="5"><label for="q7v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+
+      <div class="question">
+        <div class="question-text">Je peux savourer un aliment "interdit" sans que ça parte en excès.</div>
+        <div class="scale">
+          <input type="radio" name="q8" id="q8v1" value="1"><label for="q8v1">1</label>
+          <input type="radio" name="q8" id="q8v2" value="2"><label for="q8v2">2</label>
+          <input type="radio" name="q8" id="q8v3" value="3"><label for="q8v3">3</label>
+          <input type="radio" name="q8" id="q8v4" value="4"><label for="q8v4">4</label>
+          <input type="radio" name="q8" id="q8v5" value="5"><label for="q8v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+
+      <div class="question">
+        <div class="question-text">J'associe certains repas à des émotions positives sans dépendance émotionnelle.</div>
+        <div class="scale">
+          <input type="radio" name="q9" id="q9v1" value="1"><label for="q9v1">1</label>
+          <input type="radio" name="q9" id="q9v2" value="2"><label for="q9v2">2</label>
+          <input type="radio" name="q9" id="q9v3" value="3"><label for="q9v3">3</label>
+          <input type="radio" name="q9" id="q9v4" value="4"><label for="q9v4">4</label>
+          <input type="radio" name="q9" id="q9v5" value="5"><label for="q9v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+
+      <div class="question">
+        <div class="question-text">Je remarque comment mes émotions négatives influencent mon alimentation, sans les subir.</div>
+        <div class="scale">
+          <input type="radio" name="q10" id="q10v1" value="1"><label for="q10v1">1</label>
+          <input type="radio" name="q10" id="q10v2" value="2"><label for="q10v2">2</label>
+          <input type="radio" name="q10" id="q10v3" value="3"><label for="q10v3">3</label>
+          <input type="radio" name="q10" id="q10v4" value="4"><label for="q10v4">4</label>
+          <input type="radio" name="q10" id="q10v5" value="5"><label for="q10v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+    </div>
+
+    <!-- PILIER 3 -->
+    <div class="pilier">
+      <div class="pilier-header">
+        <div class="pilier-num">3</div>
+        <div class="pilier-title-block">
+          <div class="pilier-label">Pilier 3</div>
+          <div class="pilier-title">Le Contrôle — Cadre cognitif</div>
+        </div>
+      </div>
+      <div class="pilier-divider"></div>
+
+      <div class="question">
+        <div class="question-text">Je peux suivre un cadre alimentaire sans rigidité excessive.</div>
+        <div class="scale">
+          <input type="radio" name="q11" id="q11v1" value="1"><label for="q11v1">1</label>
+          <input type="radio" name="q11" id="q11v2" value="2"><label for="q11v2">2</label>
+          <input type="radio" name="q11" id="q11v3" value="3"><label for="q11v3">3</label>
+          <input type="radio" name="q11" id="q11v4" value="4"><label for="q11v4">4</label>
+          <input type="radio" name="q11" id="q11v5" value="5"><label for="q11v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+
+      <div class="question">
+        <div class="question-text">Je fais des choix cohérents avec mes objectifs, même hors plan.</div>
+        <div class="scale">
+          <input type="radio" name="q12" id="q12v1" value="1"><label for="q12v1">1</label>
+          <input type="radio" name="q12" id="q12v2" value="2"><label for="q12v2">2</label>
+          <input type="radio" name="q12" id="q12v3" value="3"><label for="q12v3">3</label>
+          <input type="radio" name="q12" id="q12v4" value="4"><label for="q12v4">4</label>
+          <input type="radio" name="q12" id="q12v5" value="5"><label for="q12v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+
+      <div class="question">
+        <div class="question-text">Je sais décider quand compenser un écart, et quand ce n'est pas nécessaire.</div>
+        <div class="scale">
+          <input type="radio" name="q13" id="q13v1" value="1"><label for="q13v1">1</label>
+          <input type="radio" name="q13" id="q13v2" value="2"><label for="q13v2">2</label>
+          <input type="radio" name="q13" id="q13v3" value="3"><label for="q13v3">3</label>
+          <input type="radio" name="q13" id="q13v4" value="4"><label for="q13v4">4</label>
+          <input type="radio" name="q13" id="q13v5" value="5"><label for="q13v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+
+      <div class="question">
+        <div class="question-text">Je garde un cadre alimentaire sans ressentir de frustration constante.</div>
+        <div class="scale">
+          <input type="radio" name="q14" id="q14v1" value="1"><label for="q14v1">1</label>
+          <input type="radio" name="q14" id="q14v2" value="2"><label for="q14v2">2</label>
+          <input type="radio" name="q14" id="q14v3" value="3"><label for="q14v3">3</label>
+          <input type="radio" name="q14" id="q14v4" value="4"><label for="q14v4">4</label>
+          <input type="radio" name="q14" id="q14v5" value="5"><label for="q14v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+
+      <div class="question">
+        <div class="question-text">Je peux ajuster mes règles alimentaires quand la situation change (voyage, imprévu, social).</div>
+        <div class="scale">
+          <input type="radio" name="q15" id="q15v1" value="1"><label for="q15v1">1</label>
+          <input type="radio" name="q15" id="q15v2" value="2"><label for="q15v2">2</label>
+          <input type="radio" name="q15" id="q15v3" value="3"><label for="q15v3">3</label>
+          <input type="radio" name="q15" id="q15v4" value="4"><label for="q15v4">4</label>
+          <input type="radio" name="q15" id="q15v5" value="5"><label for="q15v5">5</label>
+        </div>
+        <div class="scale-labels"><span class="scale-label">Pas du tout</span><span class="scale-label">Toujours</span></div>
+      </div>
+    </div>
+
+    <button type="button" class="btn-primary" id="calcBtn" disabled onclick="calculateResults()">
+      Voir mes résultats →
+    </button>
+    <div class="btn-note" id="btnNote">Réponds aux 15 questions pour débloquer tes résultats.</div>
+
+  </form>
+
+  <!-- RÉSULTATS -->
+  <div id="results">
+
+    <div class="results-hero">
+      <div class="accent"></div>
+      <div class="label">Tes résultats</div>
+      <h2 id="resultsTitle">Voici ton profil alimentaire.</h2>
+      <p id="resultsSubtitle">Analyse basée sur tes 15 réponses.</p>
+    </div>
+
+    <div class="score-cards" id="scoreCards"></div>
+
+    <div class="interp-block" id="interpBlock"></div>
+
+    <div class="cta-section">
+      <div class="accent"></div>
+      <h3>Tu veux passer de l'observation à l'action ?</h3>
+      <p>Ce test t'a donné une première lecture. Le vrai travail commence maintenant. On regarde ensemble ce qui te bloque — concrètement.</p>
+      <div class="cta-buttons">
+        <a href="https://wa.me/33677705047?text=Salut%20Kevin%2C%20je%20viens%20de%20faire%20le%20test%20comportement%20alimentaire%20%E2%80%94%20je%20voudrais%20en%20parler%20avec%20toi%20%F0%9F%99%8C" target="_blank" class="btn-wa">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Parler à Kevin sur WhatsApp
+        </a>
+        <a href="https://forms.fillout.com/t/5DrWA5Lz2Pus" target="_blank" class="btn-secondary">
+          Remplir le formulaire de renseignement →
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="footer">RECODE Coaching · @indianaafit · contact@coaching-indianaafit.fr</div>
+
+<script>
+const TOTAL = 15;
+const piliers = [
+  { name: 'Corps', label: 'Physiologique', questions: ['q1','q2','q3','q4','q5'] },
+  { name: 'Plaisir', label: 'Hédonique / Émotionnel', questions: ['q6','q7','q8','q9','q10'] },
+  { name: 'Contrôle', label: 'Cadre cognitif', questions: ['q11','q12','q13','q14','q15'] },
+];
+
+const interpretations = {
+  corps: {
+    solid:   "Tu écoutes bien ton corps. Tu distingues faim, fatigue, émotions. C'est une base solide — mais ça ne signifie pas que tout est réglé ailleurs.",
+    fragile: "Tu perçois tes signaux par intermittence. Des patterns reviennent sans que tu saches toujours d'où ils viennent. Explorer ce pilier va débloquer beaucoup de choses.",
+    low:     "Tu fonctionnes souvent en pilote automatique côté physique. La faim, l'énergie, le cycle — ces signaux sont là mais tu ne les lis pas encore. C'est un point de départ, pas une fatalité."
+  },
+  plaisir: {
+    solid:   "Tu as une relation assez saine avec le plaisir alimentaire. Tu manges sans spirale de culpabilité, tu comprends tes déclencheurs. Ça ne veut pas dire zéro travail — mais tu pars de bon endroit.",
+    fragile: "Il y a de la culpabilité, des élans émotionnels, des repas qui t'échappent parfois. Tu le vois — c'est déjà beaucoup. Ce pilier mérite qu'on y travaille sérieusement.",
+    low:     "L'alimentation est chargée émotionnellement pour toi. Certains repas ressemblent à des récompenses ou des punitions. Ce n'est pas une faiblesse — c'est un mécanisme appris. Et ça se retravaille."
+  },
+  controle: {
+    solid:   "Tu as un contrôle flexible. Tu respectes un cadre sans te laisser écraser par lui. Tu gères les imprévus. Ce pilier est ton atout — assure-toi qu'il ne compense pas un déficit ailleurs.",
+    fragile: "Ton contrôle oscille entre rigidité et lâcher prise. Tu te mets des règles strictes, puis tu les casses, puis tu culpabilises. Ce cycle est épuisant — et il s'arrête quand on comprend d'où il vient.",
+    low:     "Le contrôle alimentaire est soit trop rigide (tout ou rien), soit absent. Les deux épuisent. Ce n'est pas un problème de volonté. C'est un problème de cadre — et un cadre, ça se construit."
+  }
+};
+
+function getStatus(score) {
+  if (score >= 18) return 'solid';
+  if (score >= 10) return 'fragile';
+  return 'low';
+}
+
+function getStatusLabel(status) {
+  if (status === 'solid')   return '✓ Pilier solide';
+  if (status === 'fragile') return '⚡ Fragile / À explorer';
+  return '⚠ Déséquilibre marqué';
+}
+
+// Track answered questions
+let answered = new Set();
+
+document.querySelectorAll('input[type="radio"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    answered.add(radio.name);
+    updateProgress();
+  });
+});
+
+function updateProgress() {
+  const count = answered.size;
+  const pct = Math.round((count / TOTAL) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent = count + ' / ' + TOTAL + ' réponses';
+  const btn = document.getElementById('calcBtn');
+  const note = document.getElementById('btnNote');
+  if (count === TOTAL) {
+    btn.disabled = false;
+    note.textContent = '✓ Toutes les réponses enregistrées — prêt·e !';
+    note.style.color = 'var(--violet)';
+  } else {
+    btn.disabled = true;
+    note.textContent = (TOTAL - count) + ' question(s) restante(s).';
+    note.style.color = 'var(--gris)';
+  }
+}
+
+function calculateResults() {
+  const scores = piliers.map(p => {
+    return p.questions.reduce((sum, q) => {
+      const val = document.querySelector(`input[name="${q}"]:checked`);
+      return sum + (val ? parseInt(val.value) : 0);
+    }, 0);
+  });
+
+  // Hide form area, show results
+  document.getElementById('quizForm').style.display = 'none';
+  document.querySelector('.progress-bar-wrap').style.display = 'none';
+  document.querySelector('.progress-text').style.display = 'none';
+  document.querySelector('.intro-card').style.display = 'none';
+
+  const resultsEl = document.getElementById('results');
+  resultsEl.classList.add('visible');
+
+  // Build score cards
+  const container = document.getElementById('scoreCards');
+  container.innerHTML = '';
+
+  const pilierKeys = ['corps', 'plaisir', 'controle'];
+
+  scores.forEach((score, i) => {
+    const status = getStatus(score);
+    const pct = Math.round((score / 25) * 100);
+    const key = pilierKeys[i];
+
+    const card = document.createElement('div');
+    card.className = 'score-card';
+    card.style.animationDelay = (0.1 * i) + 's';
+    card.innerHTML = `
+      <div class="score-circle ${status}">${score}</div>
+      <div class="score-info">
+        <div class="score-pilier">Pilier ${i+1} · ${piliers[i].label}</div>
+        <div class="score-title">${piliers[i].name}</div>
+        <span class="score-status ${status}">${getStatusLabel(status)}</span>
+        <div class="score-bar-wrap"><div class="score-bar ${status}" style="width:0%" data-target="${pct}%"></div></div>
+        <div class="score-interp">${interpretations[key][status]}</div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  // Animate bars after render
+  setTimeout(() => {
+    document.querySelectorAll('.score-bar').forEach(bar => {
+      bar.style.width = bar.dataset.target;
+    });
+  }, 100);
+
+  // Global interpretation
+  const statuses = scores.map(getStatus);
+  const lowCount = statuses.filter(s => s === 'low').length;
+  const solidCount = statuses.filter(s => s === 'solid').length;
+
+  let globalTitle, globalSub;
+  if (solidCount === 3) {
+    globalTitle = "Ton système alimentaire est équilibré.";
+    globalSub = "Tu as une bonne lecture de toi-même sur les 3 piliers. Ce n'est pas parfait — rien ne l'est — mais tu pars d'une base solide pour aller plus loin dans ta progression.";
+  } else if (lowCount >= 2) {
+    globalTitle = "Ton système alimentaire est sous tension.";
+    globalSub = "Plusieurs piliers montrent des déséquilibres importants. Ce n'est pas une surprise si tu stagnes, tu craques, ou si manger te prend de l'énergie mentale. C'est exactement ce qu'on travaille en coaching.";
+  } else if (lowCount === 1) {
+    globalTitle = "Un pilier fragilise les deux autres.";
+    globalSub = "Ton système tient, mais un point de fragilité majeur crée des compensations. Identifier et travailler ce pilier change tout — souvent plus vite qu'on ne le pense.";
+  } else {
+    globalTitle = "Bonne base — mais des zones à explorer.";
+    globalSub = "Tu n'es pas en déséquilibre marqué, mais certains piliers sont fragiles. Ce sont souvent ces zones grises qui créent les patterns répétitifs dont on n'arrive pas à sortir seule.";
+  }
+
+  document.getElementById('resultsTitle').textContent = globalTitle;
+  document.getElementById('resultsSubtitle').textContent = globalSub;
+
+  // Interpretation block
+  const weakest = statuses.indexOf(statuses.reduce((worst, s) => {
+    const rank = { low: 0, fragile: 1, solid: 2 };
+    return rank[s] < rank[worst] ? s : worst;
+  }, 'solid'));
+
+  const interpHtml = `
+    <h3>🎯 Par où commencer ?</h3>
+    <p>Ton pilier le plus à travailler est <strong>le ${piliers[weakest].name}</strong> (${piliers[weakest].label}). 
+    C'est souvent là que se cachent les blocages les plus persistants. 
+    Avant d'agir fort, observe : prends des données sur toi, identifie les moments où ce pilier flanche, 
+    et commence à en parler — à toi d'abord, puis avec quelqu'un qui peut t'accompagner.</p>
+  `;
+  document.getElementById('interpBlock').innerHTML = interpHtml;
+
+  // Scroll to results
+  setTimeout(() => {
+    resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+</script>
+</body>
+</html>
